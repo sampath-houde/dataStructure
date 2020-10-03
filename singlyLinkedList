@@ -1,0 +1,622 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int ch, i = 1;
+struct node
+{
+    int data;
+    struct node* link;
+};
+struct node* head = NULL;
+struct node* head2 = NULL;
+
+void create1list()                      //Function to Create 1st list
+{
+    printf("*******Create Linked List***** \n\n");
+    struct node *newnode;
+    newnode = (struct node*)malloc(sizeof(struct node));
+    printf("Enter value for 1st node: ");
+    scanf("%d", &newnode -> data);
+    printf("\n");
+    head = newnode;
+}
+
+void insert()                        // Function to insert nodes
+{
+    struct node* newnode;
+    int len, pos;
+    printf("Enter the position: ");
+    scanf("%d", &pos);
+    len = length();
+    if(pos > len + 1 || pos < 0){
+        printf("Invalid input \n");
+    }
+    else
+    {
+        newnode = (struct node*)malloc(sizeof(struct node));
+        printf("Enter the value: ");
+        scanf("%d", &newnode -> data);
+        if(pos == 1)
+        {
+            newnode -> link = head;
+            head = newnode;
+            printf("Node inserted successfully. \n");
+        } 
+        else 
+        if(pos == len + 1) 
+        {
+            newnode -> link = NULL;
+            struct node* temp;
+            temp = head;
+            while(temp -> link != NULL)
+            {
+                temp = temp -> link;
+            }
+            temp -> link = newnode;
+            printf("Node inserted successfully. \n");
+        }
+        else
+        {
+            int i = 1;
+            struct node* temp;
+            temp = head;
+            while(i < pos)
+            {
+                temp = temp -> link;
+                i++;
+            }
+            newnode -> link = temp -> link;
+            temp -> link = newnode;
+            printf("Node inserted successfully. \n");
+        }
+    }
+}
+
+
+void option1()                  // Insert Menu
+{
+    int i=1,ch;
+    printf("******INSERT******** \n\n");
+    while(i == 1)
+    {
+        printf("1. Insert Data By Position\n");
+        printf("2. Insert Data By Value. \n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+        printf("\n");
+        switch(ch)
+        {
+            case 1: insertByPosition(); break;
+            
+            case 2: insertByValue(); break;
+            
+            default: printf("Enter valid input \n"); break;
+            
+        }
+    }
+}
+
+void delete()                       // Function to delete nodes
+{
+    struct node* temp, newnode;
+    int len, pos;
+    len = length();
+    printf("Enter the position: ");
+    scanf("%d", &pos);
+    if(len == 0)
+    {
+        printf("List is Empty \n");
+    }
+    else
+    if(pos > len || pos < 1){
+        printf("Invalid input \n");
+    } 
+    else
+    if(pos == 1) 
+    {
+        struct node* temp;
+        temp = head;
+        head = temp -> link;
+        free(temp);
+        printf("Node deleted successfully. \n");
+    } 
+    else
+    if(pos == len)
+    {
+        struct node* prevNode, *temp;
+        temp = head;
+        while(temp -> link != NULL)
+        {
+            prevNode = temp;
+            temp = temp -> link;
+        }
+        prevNode -> link = NULL;
+        free(temp);
+        printf("Node deleted successfully. \n");
+    }
+    else
+    {
+        int i = 1;
+        struct node* prevNode;
+        struct node* temp;
+        temp = head;
+        while(i < pos-1)
+        {
+            prevNode = temp;
+            temp = temp -> link;
+            i++;
+        }
+        prevNode -> link = temp -> link;
+        free(temp);
+        printf("Node deleted successfully. \n");
+    }
+}
+
+
+void option2()                  // Delete Menu
+{
+    int i=1,ch;
+    printf("******DELETE******** \n\n");
+    while(i == 1)
+    {
+        printf("1. Delete Data \n");
+        printf("2. Quit \n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+        printf("\n");
+        switch(ch)
+        {
+            case 1: delete(); break;
+            
+            case 2: i=0; break;
+            
+            default: printf("Invalid input. \n"); break;
+        }
+    }
+}
+
+void update()   // Function to update the value of the nodes at specified position
+{
+    struct node* newnode;
+    int pos;
+    int len = length();
+    printf("Enter the position: ");
+    scanf("%d", &pos);
+    printf("\n");
+    len = length();
+    if(len == 0)
+    {
+        printf("List is Empty \n");
+    }
+    else
+    if(pos > len + 1 || pos < 0){
+        printf("Invalid input \n");
+    }
+    else
+    {
+        int i = 1;
+        struct node* temp;
+        newnode = (struct node*)malloc(sizeof(struct node));
+        printf("Enter the value: ");
+        scanf("%d", &newnode -> data);
+        temp = head;
+        while(i < pos)
+        {
+            temp = temp -> link;
+            i++;
+        }
+        temp -> data = newnode -> data;
+        printf("Node updated successfully. \n");
+    }
+}
+
+void option3()   // Update Menu
+{
+    int i=1,ch;
+    printf("******UPDATE******** \n\n");
+    while(i == 1)
+    {
+        printf("1. Update Data \n");
+        printf("2. Quit \n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+        printf("\n");
+        switch(ch)
+        {
+            case 1: update(); break;
+            
+            case 2: i=0; break;
+            
+            default: printf("Invalid input. \n"); break;
+        }
+    }
+}
+
+int length()  // Function that returns length of the live node list
+{
+    int count = 0;
+    struct node* temp;
+    if(head == NULL)
+    {
+       return 0;
+    }
+    else
+    {
+        temp = head;
+        while(temp != NULL)
+        {
+            count++;
+            temp = temp -> link;
+        }
+    }
+    return count;
+}
+
+void display()     // Function to display the nodes in the list
+{
+    printf("*********DISPLAY********** \n\n");
+    struct node* temp;
+    if(head == NULL)
+    {
+        printf("No nodes to show. \n");
+    }
+    else
+    {
+       temp = head;
+        while(temp != NULL)
+        {
+            printf("-> %d ", temp -> data);
+            temp = temp -> link;
+        }
+        printf("\n\n");
+    }
+}
+
+void reverse()   // Function to reverse the list 
+{
+    struct node *prev, *current, *next;
+    prev = 0;
+    current = next = head;
+    while(next != NULL)
+    {
+        next = next -> link;
+        current -> link = prev;
+        prev = current;
+        current = next;
+    }
+    head = prev;
+    printf("List has been Reversed successfully. \n\n");
+}
+
+void ascending() //Function to sort the values of the nodes in ascending order
+{
+    struct node *ptr1, *ptr2 = NULL;
+    int len = length();
+    int swapped;
+    if(len == 0 || len == 1)
+    {
+        printf("The list cannot be sorted");
+    }
+    else
+   {
+       int i;
+       for(ptr1 = head; ptr1 != NULL; ptr1 = ptr1 -> link)
+       {
+           for(ptr2 = ptr1 -> link; ptr2 != NULL; ptr2 = ptr2 -> link)
+           {
+               if(ptr1 -> data > ptr2 -> data)
+               {
+                   i = ptr1 -> data;
+                   ptr1 -> data = ptr2 -> data;
+                   ptr2 -> data = i;
+               }
+           }
+       }
+       printf("List Sorted successfully. \n\n");
+   }
+    
+}
+
+void descending() //Function to sort the values of the nodes in descending order
+{
+    struct node *ptr1, *ptr2;
+    int len = length();
+    if(len == 0 || len == 1)
+    {
+        printf("The list cannot be sorted as it has no node or only one node. \n\n");
+    }
+    else
+    {
+       int i;
+       for(ptr1 = head; ptr1 != NULL; ptr1 = ptr1 -> link)
+       {
+           for(ptr2 = ptr1 -> link; ptr2 != NULL; ptr2 = ptr2 -> link)
+           {
+               if(ptr1 -> data < ptr2 -> data)
+               {
+                   i = ptr1 -> data;
+                   ptr1 -> data = ptr2 -> data;
+                   ptr2 -> data = i;
+               }
+           }
+       }
+       printf("List Sorted successfully. \n\n");
+   }
+}
+
+void sort() // Menu for SORT option
+{
+    int i=1,ch;
+    printf("******SORT******** \n\n");
+    while(i == 1)
+    {
+        printf("1. Ascending. \n");
+        printf("2. Descending. \n");
+        printf("3. Quit. \n");
+        
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+        printf("\n");
+        switch(ch)
+        {
+            case 1: ascending(); break;
+            
+            case 2: descending(); break;
+            
+            case 3: i = 0; break;
+            
+            default: printf("Enter valid input. \n"); break;
+        }
+    }
+}
+
+void search() //Display the value of the node at a specified position
+{
+    struct node *temp;
+    int pos,len;
+    printf("Enter the position: ");
+    scanf("%d", &pos);
+    printf("\n");
+    len = length();
+    if(len == 0)
+    {
+        printf("List is Empty \n");
+    }
+    else
+    if(pos > len || pos < 0){
+        printf("Invalid input \n");
+    }
+    else
+    {
+        int i = 1;
+        temp = head;
+        while(i < pos)
+        {
+            temp = temp -> link;
+            i++;
+        }
+        printf("%d \n", temp -> data);
+    }
+    
+}
+
+void option8()  // Menu for Search option
+{
+    int i=1,ch;
+    printf("******SEARCH******** \n\n");
+    while(i == 1)
+    {
+        printf("1. Search \n");
+        printf("2. Quit \n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+        printf("\n");
+        switch(ch)
+        {
+            case 1: search(); break;
+            
+            case 2: i=0;break;
+            
+            default: printf("Invalid input. \n"); break;
+        }
+    }
+}
+
+int length2list() // Returns the live length of the second link list
+{
+    int count = 0;
+    struct node* temp;
+    if(head2 == NULL)
+    {
+       return 0;
+    }
+    else
+    {
+        temp = head2;
+        while(temp != NULL)
+        {
+            count++;
+            temp = temp -> link;
+        }
+    }
+    return count;
+}
+
+void create2list() // Function to create 2nd linked list
+{
+    struct node* newnode;
+    int len, pos;
+    printf("Enter the position: ");
+    scanf("%d", &pos);
+    len = length2list();
+    if(pos > len + 1 || pos < 0){
+        printf("Invalid input \n");
+    }
+    else
+    {
+        newnode = (struct node*)malloc(sizeof(struct node));
+        printf("Enter the value: ");
+        scanf("%d", &newnode -> data);
+        if(head2 == NULL && len == 0)
+        {
+            head2 = newnode;
+            printf("Node inserted successfully. \n");
+        }
+        else 
+        if(pos == 1)
+        {
+            newnode -> link = head2;
+            head2 = newnode;
+            printf("Node inserted successfully. \n");
+        } 
+        else 
+        if(pos == len + 1) 
+        {
+            newnode -> link = NULL;
+            struct node* temp;
+            temp = head2;
+            while(temp -> link != NULL)
+            {
+                temp = temp -> link;
+            }
+            temp -> link = newnode;
+            printf("Node inserted successfully. \n");
+        }
+        else
+        {
+            int i = 1;
+            struct node* temp;
+            temp = head2;
+            while(i < pos)
+            {
+                temp = temp -> link;
+                i++;
+            }
+            newnode -> link = temp -> link;
+            temp -> link = newnode;
+            printf("Node inserted successfully. \n");
+        }
+    }
+}
+
+void option8Of1() // Menu for Second Linked list option
+{
+    int ch, i=1;
+    if(head == NULL)
+    {
+        printf("Second list cannot be created because first list hasn't been created. \n");
+    }
+    else
+    {
+        printf("****CREATE SECOND LIST******* \n\n");
+        while(i == 1)
+        {
+            printf("1. Insert Data \n");
+            printf("2. Quit \n");
+            printf("Enter your choice: ");
+            scanf("%d", &ch);
+            printf("\n");
+            switch(ch)
+            {
+                case 1: create2list(); break;
+                
+                case 2: i = 0; break;
+                
+                default: printf("Invalid input. \n"); break;
+            }
+        }
+    }
+}
+
+void merge() // Function to merge the 1st and 2nd linked list
+{
+    struct node* temp;
+    if(head == NULL)
+    {
+        printf("Merge unsuccessfull because first list hasn't been created. \n");
+    }
+    else
+    if(head2 == NULL)
+    {
+        printf("Merge unsuccessgul because second list wasn't created. \n");
+    }
+    else
+    {
+        temp = head;
+        while(temp -> link != NULL)
+        {
+            temp = temp -> link;
+        }
+        temp -> link = head2;
+        free(head2);
+        printf("Merge successfull. \n");
+    }
+}
+
+void option9() // Menu for merge option
+{
+    printf("*****MERGE******** \n\n");
+    int i=1,ch;\
+    while(i == 1)
+    {
+        printf("1. Create second list \n");
+        printf("2. Merge \n");
+        printf("3. Quit \n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+        printf("\n");
+        switch(ch)
+        {
+            case 1: option8Of1(); break;
+            
+            case 2: merge(); break;
+            
+            case 3: i=0;break;
+            
+            default: printf("Invalid input. \n"); break;
+        }
+    }
+}
+
+void main()  
+{
+    create1list();             
+    
+    while(i == 1) 
+    {
+        /* MENU */
+        printf("Linked List Operations\n");
+        printf("1. Insert data(position, value)\n");
+        printf("2. Delete data(position)\n");
+        printf("3. Update data(position, value)\n");
+        printf("4. Length of the list \n");
+        printf("5. Display all the nodes. \n");
+        printf("6. Reverse the list. \n");
+        printf("7. Sort the list. \n");
+        printf("8. Search(position). \n");
+        printf("9. Merge. \n");
+        printf("10. Quit \n\n");
+        printf("Enter your choice: ");
+        scanf("%d", &ch);
+        printf("\n");
+        switch(ch) 
+        {
+            case 1: option1(); break;
+            case 2: option2(); break;
+            case 3: option3(); break;
+            case 4: 
+            {
+                int len = length(); 
+                printf("Length of the list is: %d \n", len);  //Printing length of the list
+            } 
+            break;
+            case 5: display(); break;
+            case 6: reverse(); break;
+            case 7: sort(); break;
+            case 8: option8(); break;
+            case 9: option9(); break;
+            case 10: i = 0; break;
+            default: printf("Enter valid input. \n");
+        }
+    }
+}
